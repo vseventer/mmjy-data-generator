@@ -1,0 +1,46 @@
+{
+  "name"        : "mmjy-data-generator",
+  "version"     : "0.1.0-dev",
+  "description" : "Utility for generating GeoJSON for MarkMyJourney.",
+  "license"     : "MIT",
+  "author"      : "Mark van Seventer <mark@vseventer.com>",
+  "repository"  : "vseventer/mmjy-data-generator",
+  "config"      : {
+    "centroids" : "http://dev.maxmind.com/static/csv/codes/country_latlon.csv",
+    "countries" : "http://download.geonames.org/export/dump/countryInfo.txt",
+    "shapes"    : "http://download.geonames.org/export/dump/shapes_simplified_low.zip"
+  },
+  "main"    : "index.js",
+  "scripts" : {
+    "clean"     : "rimraf ./out ./src",
+    "postclean" : "mkdir ./out",
+
+    "pregenerate" : "npm run pull",
+    "generate"    : "node .",
+
+    "pull": "parallelshell 'npm run pull:centroids' 'npm run pull:countries' 'npm run pull:shapes'",
+    "pull:centroids"  : "curl -o src/centroids.csv --create-dirs $npm_package_config_centroids",
+    "pull:countries"  : "curl -o src/countries.csv --create-dirs $npm_package_config_countries",
+    "pull:shapes"     : "curl -o src/shapes.zip    --create-dirs $npm_package_config_shapes",
+    "postpull:shapes" : "unzip -p src/shapes.zip > src/shapes.csv",
+
+    "prestart" : "npm run clean",
+    "start"    : "npm run generate",
+
+    "test": "jshint --reporter=./node_modules/jshint-stylish *.js lib/"
+  },
+  "dependencies": {
+    "async"         : "1.5.x",
+    "csv-parse"     : "1.0.x",
+    "object-assign" : "4.0.x",
+    "parallelshell" : "2.0.x",
+    "rimraf"        : "2.4.x",
+    "slug"          : "0.9.x"
+  },
+  "devDependencies": {
+    "jshint"         : "2.8.x",
+    "jshint-stylish" : "2.1.x"
+  },
+  "engines" : { "node": ">=0.10" },
+  "private" : true
+}
