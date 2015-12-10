@@ -24,80 +24,50 @@
 // Strict mode.
 'use strict';
 
+// Standard lib.
+var path = require('path');
+
+// Configure.
+var src  = path.join(__dirname, './src'),
+    dest = path.join(__dirname, './out');
+
 // Exports.
 module.exports = {
-  // Destination filename.
-  dest: 'countries.geo.json',
+  // Source.
+  src: {
+    continents : path.join(src, 'continents.json'),
+    countries  : path.join(src, 'countries.json'),
+    shapes     : path.join(src, 'shapes.csv'),
 
-  // Custom centroid mapping.
-  centroids: {
-    'AX' : [  60.20,   19.81 ], // Aland Islands.
-    'BL' : [  17.9,   -62.83 ], // Saint Barthelemey.
-    'BQ' : [  12.18,  -68.23 ], // Bonaire, Saint Eustatius and Saba.
-    'CW' : [  12.18,  -69    ], // Curacao.
-    'GG' : [  49.45,   -2.55 ], // Guernsey.
-    'IM' : [  54.25,   -4.5  ], // Isle of Men.
-    'JE' : [  49.19,   -2.11 ], // Jersey.
-    'MF' : [  18.07,  -63.05 ], // Saint Martin.
-    'PN' : [ -25.07, -130.10 ], // Pitcairn.
-    'SS' : [   4.85,   31.6  ], // South Sudan.
-    'SX' : [  18.07,  -63.05 ], // Sint Maarten.
-    'TL' : [  -8.57,  125.57 ], // Timor Leste.
-    'XK' : [  42.58,   21    ]  // Kosovo.
+    caribbean      : path.join(src, 'caribbean.json'),
+    centralAmerica : path.join(src, 'central-america.json'),
+    middleEast     : path.join(src, 'middle-east.json')
   },
 
-  // Custom continent mapping.
-  continents: {
-    // Caribbean.
-    caribbeanCode: 'CR',
-    caribbean: [
-      'AI', // Anguilla.
-      'AG', // Antigua and Barbuda.
-      'AW', // Aruba.
-      'BB', // Barbados.
-      'BQ', // Bonaire, Saint Eustasius and Saba.
-      'KY', // Cayman Islands.
-      'CU', // Cuba.
-      'CW', // Curacao.
-      'DM', // Dominica.
-      'DO', // Dominican Republic.
-      'GD', // Grenada.
-      'GP', // Guadeloupe.
-      'HT', // Haiti.
-      'JM', // Jamaica.
-      'MQ', // Martinique.
-      'MS', // Montserrat.
-      'PR', // Puerto Rico.
-      'BL', // Saint Barthelemy.
-      'KN', // Saint Kitts and Nevis.
-      'LC', // Saint Lucia.
-      'MF', // Saint Martin.
-      'VC', // Saint Vincent and the Grenadines.
-      'SX', // Sint Maarten.
-      'TT', // Trinidad and Tobago.
-      'TC', // Turks and Caicos Islands.
-      'VG', // British Virgin Islands.
-      'VI'  // U.S. Virgin Islands.
-    ],
+  // Destination.
+  dest: {
+    continents : path.join(dest, 'continents.json'),
+    countries  : path.join(dest, 'countries.json')
+  },
 
-    // Central America.
-    centralAmericaCode: 'CA',
-    centralAmerica: [
-      'BZ', // Belize.
-      'CR', // Costa Rica.
-      'SV', // El Salvador.
-      'GF', // French Guiana.
-      'GT', // Guatemala.
-      'GY', // Guyana.
-      'HN', // Honduras.
-      'NI', // Nicaragua.
-      'PA', // Panama.
-      'SR'  // Suriname.
-    ],
-
-    // Middle East.
-    middleEastCode: 'ME',
-    middleEast: [
+  // Custom continents.
+  continents: [{
+    id   : 'Carribean',
+    name : 'Caribbean', // Fix GeoNames typo.
+    code : 'CR'
+  }, {
+    id   : 'Central America',
+    code : 'CA'
+  }, {
+    id   : 'Middle East',
+    code : 'ME',
+    bbox : {
+      north : 39.777222, // Iran.
+      east  : 63.317471, // Iran.
+      south : 12.1110910264462, // Yemen.
+      west  : 24.698111  // Egypt.
+    },
+    cc2: [
       'BH', // Bahrain.
       'EG', // Egypt.
       'IR', // Iran.
@@ -114,12 +84,8 @@ module.exports = {
       'AE', // United Arab Emirates.
       'YE'  // Yemen.
     ]
-  },
+  }],
 
-  // Country CSV-mapping.
-  csvColumns: [
-    'iso', 'iso3', 'iso-numeric', 'fips', 'name', 'capital', 'area', 'population', 'continent',
-    'tld', 'currencyCode', 'currencyName', 'phone', 'postalCode', 'postalCodeRegex', 'languages',
-    'geonameid', 'neighbours', 'fipsCode'
-  ]
+  // Maximum polygon length.
+  maxLength: 250
 };

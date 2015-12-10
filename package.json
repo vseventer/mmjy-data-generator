@@ -1,14 +1,18 @@
 {
   "name"        : "mmjy-data-generator",
-  "version"     : "0.1.0-dev",
+  "version"     : "0.1.0",
   "description" : "Utility for generating GeoJSON for MarkMyJourney.",
   "license"     : "MIT",
   "author"      : "Mark van Seventer <mark@vseventer.com>",
   "repository"  : "vseventer/mmjy-data-generator",
   "config"      : {
-    "centroids" : "http://dev.maxmind.com/static/csv/codes/country_latlon.csv",
-    "countries" : "http://download.geonames.org/export/dump/countryInfo.txt",
-    "shapes"    : "http://download.geonames.org/export/dump/shapes_simplified_low.zip"
+    "continents" : "http://api.geonames.org/searchJSON?q=&featureCode=CONT&formatted=true&style=full&username=demo",
+    "countries"  : "http://api.geonames.org/searchJSON?q=&featureCode=PCL&featureCode=PCLD&featureCode=PCLF&featureCode=PCLI&featureCode=PCLIX&featureCode=PCLS&featureCode=TERR&formatted=true&maxRows=500&style=full&username=demo",
+    "shapes"     : "http://download.geonames.org/export/dump/shapes_simplified_low.zip",
+
+    "caribbean"       : "http://api.geonames.org/searchJSON?name=carribean&featureCode=RGN&formatted=true&style=full&username=demo",
+    "central_america" : "http://api.geonames.org/searchJSON?name=central+america&featureCode=RGN&formatted=true&style=full&username=demo",
+    "middle_east"     : "http://api.geonames.org/searchJSON?name=middle+east&featureCode=RGN&formatted=true&style=full&username=demo"
   },
   "main"    : "index.js",
   "scripts" : {
@@ -18,11 +22,16 @@
     "pregenerate" : "npm run pull",
     "generate"    : "node .",
 
-    "pull": "parallelshell 'npm run pull:centroids' 'npm run pull:countries' 'npm run pull:shapes'",
-    "pull:centroids"  : "curl -o src/centroids.csv --create-dirs $npm_package_config_centroids",
-    "pull:countries"  : "curl -o src/countries.csv --create-dirs $npm_package_config_countries",
-    "pull:shapes"     : "curl -o src/shapes.zip    --create-dirs $npm_package_config_shapes",
+    "pull": "parallelshell 'npm run pull:continents' 'npm run pull:countries' 'npm run pull:shapes' 'npm run pull:caribbean' 'npm run pull:central-america' 'npm run pull:middle-east'",
+
+    "pull:continents" : "curl -o src/continents.json --create-dirs $npm_package_config_continents",
+    "pull:countries"  : "curl -o src/countries.json  --create-dirs $npm_package_config_countries",
+    "pull:shapes"     : "curl -o src/shapes.zip      --create-dirs $npm_package_config_shapes",
     "postpull:shapes" : "unzip -p src/shapes.zip > src/shapes.csv",
+
+    "pull:caribbean"       : "curl -o src/caribbean.json       --create-dirs $npm_package_config_caribbean",
+    "pull:central-america" : "curl -o src/central-america.json --create-dirs $npm_package_config_central_america",
+    "pull:middle-east"     : "curl -o src/middle-east.json     --create-dirs $npm_package_config_middle_east",
 
     "prestart" : "npm run clean",
     "start"    : "npm run generate",
@@ -44,3 +53,5 @@
   "engines" : { "node": ">=0.10" },
   "private" : true
 }
+
+

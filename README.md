@@ -2,15 +2,14 @@
 > Utility for generating GeoJSON for [MarkMyJourney](https://github.com/vseventer/markmyjourney).
 
 ## Installation
-`$ git clone vseventer/mmjy-data-generator`
+* `$ git clone vseventer/mmjy-data-generator`
+* Replace `?username=demo` with your [GeoNames](http://www.geonames.org/) username inside `package.json` config property.
 
 ## Usage
 `$ npm start`
 
 ## Credits
-* Centroids: [MaxMind](https://dev.maxmind.com/geoip/legacy/codes/country_latlon/) ([CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)),
-* Countries: [GeoNames](http://download.geonames.org/export/dump/) ([CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)),
-* Shapes: [GeoNames](http://download.geonames.org/export/dump/) ([CC BY 3.0](https://creativecommons.org/licenses/by/3.0/)),
+Continent, country, and shape data from [GeoNames.org](http://www.geonames.org/).
 
 ## Changelog
 See the [Changelog](./CHANGELOG.md) for a list of changes.
