@@ -1,7 +1,7 @@
 {
   "name"        : "mmjy-data-generator",
   "version"     : "0.1.0",
-  "description" : "Utility for generating GeoJSON for MarkMyJourney.",
+  "description" : "Utility for generating GeoJSON continent and country data for MarkMyJourney.",
   "license"     : "MIT",
   "author"      : "Mark van Seventer <mark@vseventer.com>",
   "repository"  : "vseventer/mmjy-data-generator",

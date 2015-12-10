@@ -1,5 +1,5 @@
 # mmjy-data-generator
-> Utility for generating GeoJSON for [MarkMyJourney](https://github.com/vseventer/markmyjourney).
+> Utility for generating GeoJSON continent and country data for [MarkMyJourney](https://github.com/vseventer/markmyjourney).
 
 ## Installation
 * `$ git clone vseventer/mmjy-data-generator`
