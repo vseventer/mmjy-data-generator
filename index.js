@@ -113,11 +113,11 @@ var recordToGeoJSONFeature = function(type) {
           type: 'Polygon',
           coordinates: [
             [
-              roundCoords([ record.bbox.west, record.bbox.north ]),
-              roundCoords([ record.bbox.west, record.bbox.south ]),
-              roundCoords([ record.bbox.east, record.bbox.south ]),
               roundCoords([ record.bbox.east, record.bbox.north ]),
-              roundCoords([ record.bbox.west, record.bbox.north ])
+              roundCoords([ record.bbox.east, record.bbox.south ]),
+              roundCoords([ record.bbox.west, record.bbox.south ]),
+              roundCoords([ record.bbox.west, record.bbox.north ]),
+              roundCoords([ record.bbox.east, record.bbox.north ])
             ]
           ]
         }]
