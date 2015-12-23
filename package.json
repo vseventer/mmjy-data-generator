@@ -7,7 +7,9 @@
   "repository"  : "vseventer/mmjy-data-generator",
   "config"      : {
     "continents" : "http://api.geonames.org/searchJSON?q=&featureCode=CONT&formatted=true&style=full&username=demo",
-    "countries"  : "http://api.geonames.org/searchJSON?q=&featureCode=PCL&featureCode=PCLD&featureCode=PCLF&featureCode=PCLI&featureCode=PCLIX&featureCode=PCLS&featureCode=TERR&formatted=true&maxRows=500&style=full&username=demo",
+    "countries1" : "http://api.geonames.org/searchJSON?q=&featureCode=PCL&featureCode=PCLD&featureCode=PCLF&featureCode=PCLI&featureCode=PCLIX&featureCode=PCLS&featureCode=TERR&formatted=true&maxRows=500&style=full&username=demo",
+    "countries2" : "http://download.geonames.org/export/dump/countryInfo.txt",
+    "languages"  : "http://download.geonames.org/export/dump/iso-languagecodes.txt",
     "shapes"     : "http://download.geonames.org/export/dump/shapes_simplified_low.zip",
 
     "caribbean"       : "http://api.geonames.org/searchJSON?name=carribean&featureCode=RGN&formatted=true&style=full&username=demo",
@@ -22,10 +24,12 @@
     "pregenerate" : "npm run pull",
     "generate"    : "node .",
 
-    "pull": "parallelshell 'npm run pull:continents' 'npm run pull:countries' 'npm run pull:shapes' 'npm run pull:caribbean' 'npm run pull:central-america' 'npm run pull:middle-east'",
+    "pull": "parallelshell 'npm run pull:continents' 'npm run pull:countries1' 'npm run pull:countries2' 'npm run pull:languages' 'npm run pull:shapes' 'npm run pull:caribbean' 'npm run pull:central-america' 'npm run pull:middle-east'",
 
     "pull:continents" : "curl -o src/continents.json --create-dirs $npm_package_config_continents",
-    "pull:countries"  : "curl -o src/countries.json  --create-dirs $npm_package_config_countries",
+    "pull:countries1" : "curl -o src/countries.json  --create-dirs $npm_package_config_countries1",
+    "pull:countries2" : "curl -o src/countries.csv   --create-dirs $npm_package_config_countries2",
+    "pull:languages"  : "curl -o src/languages.csv   --create-dirs $npm_package_config_languages",
     "pull:shapes"     : "curl -o src/shapes.zip      --create-dirs $npm_package_config_shapes",
     "postpull:shapes" : "unzip -p src/shapes.zip > src/shapes.csv",
 

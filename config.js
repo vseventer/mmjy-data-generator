@@ -37,6 +37,8 @@ module.exports = {
   src: {
     continents : path.join(src, 'continents.json'),
     countries  : path.join(src, 'countries.json'),
+    countries2 : path.join(src, 'countries.csv'),
+    languages  : path.join(src, 'languages.csv'),
     shapes     : path.join(src, 'shapes.csv'),
 
     caribbean      : path.join(src, 'caribbean.json'),
@@ -85,6 +87,29 @@ module.exports = {
       'YE'  // Yemen.
     ]
   }],
+
+  // Secondary country mapping.
+  columns: [
+    'iso2',
+    'iso3',
+    'iso',
+    'fips',
+    'name',
+    'capital',
+    'area',
+    'population',
+    'continent',
+    'tld',
+    'currencyCode',
+    'currencyName',
+    'phone',
+    'postalCodeFormat',
+    'postalCodeRegex',
+    'languages',
+    'geonameid',
+    'neighbours',
+    'fips2'
+  ],
 
   // Maximum polygon length.
   maxLength: 250

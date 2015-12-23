@@ -32,8 +32,9 @@ var fs   = require('fs'),
     util = require('util');
 
 // Package modules.
-var async = require('async'),
-    slug  = require('slug');
+var async   = require('async'),
+    numeral = require('numeral'),
+    slug    = require('slug');
 
 // Local modules.
 var config      = require('./config'),
@@ -62,6 +63,18 @@ var appendShapesToGeoJSONFeatures = function(features, shapes) {
     feature.geometry.geometries.push(polygon.reduce(shape));
     return feature;
   });
+};
+
+// Returns a human size number.
+var humanSize = function(n) {
+  var rounded =  10000 <= n ? Math.round(n / 1000) * 1000 : n,
+      format  = 950000 <= rounded ? '0.0a' : '0,0',
+      result  = numeral(rounded).format(format),
+      index   = result.indexOf('m');
+  if(-1 !== index) {
+    result = result.substr(0, index) + ' million';
+  }
+  return result;
 };
 
 // Converts the provided record to continent record.
@@ -93,16 +106,24 @@ var recordToGeoJSONFeature = function(type) {
     }
     codes.push(code); // Append.
 
+    // Timezone.
+    var timezone = record.timezone;
+    if(null != timezone) {
+      timezone = { dst: timezone.dstOffset, gmt: timezone.gmtOffset };
+    }
+
     // Return the feature.
     return {
       type: 'Feature',
       properties: {
-        id   : record.geonameId,
-        code : code,
-        name : record.name,
-        slug : slug(record.name, { lower: true }),
-        continent: 'country' === type ? record.continentCode : undefined, // Omitted if `undefined`.
-        countries: record.countries // Omitted if `undefined`.
+        id      : record.geonameId,
+        code    : code,
+        slug    : slug(record.name, { lower: true }),
+        name    : record.name,
+        toponym : record.toponymName || record.name,
+        timezone  : timezone || undefined, // Omitted if `undefined`.
+        continent : 'country' === type ? record.continentCode : undefined, // Omitted if `undefined`.
+        countries : record.countries // Omitted if `undefined`.
       },
       geometry: {
         type: 'GeometryCollection',
@@ -140,7 +161,9 @@ var requireSrc = function(file, callback) {
 var sort = function(arr, field) {
   field = field || 'name'; // Cast.
   arr.sort(function(x, y) {
-    return x.properties[field] < y.properties[field] ? -1 : 1;
+    var subjectX = x.hasOwnProperty('properties') ? x.properties : x,
+        subjectY = y.hasOwnProperty('properties') ? y.properties : y;
+    return subjectX[field] < subjectY[field] ? -1 : 1;
   });
   return arr;
 };
@@ -170,6 +193,68 @@ var updateContinentForGeoJSONFeatures = function(features, continents) {
       }
     });
     return feature;
+  });
+};
+
+// Appends the country information for the provided countries.
+var updateSecondaryInfo = function(countries, info, languages) {
+  // Helper function to remove empty elements from an array.
+  var notEmpty = function(el) {
+    return '' !== el;
+  };
+
+  // Return the result.
+  return countries.map(function(country) {
+    var countryInfo = info[country.properties.code.toLowerCase()] || null;
+    if(null === countryInfo) {
+      console.log('Skipping: no additional country info for %s (%s).', country.properties.name, country.properties.code);
+      return country;
+    }
+
+    // Add simple properties.
+    country.properties.area       = humanSize(countryInfo.area);
+    country.properties.capital    = countryInfo.capital    || null;
+    country.properties.population = humanSize(countryInfo.population);
+
+    // Add languages.
+    country.properties.languages = countryInfo.languages.split(',').filter(notEmpty).map(function(code) {
+      // Remove any dialects.
+      var index = code.indexOf('-');
+      if(-1 !== index) {
+        return code.substr(0, index);
+      }
+      return code;
+    }).map(function(code) {
+      var language = languages[code.toUpperCase()] || null;
+      if(null === language) {
+        console.log('Skipping: no language for code %s.', code);
+      }
+      return { code: code, name: language };
+    });
+
+    // Add neighbors.
+    country.properties.neighbours = countryInfo.neighbours.split(',').filter(notEmpty).map(function(code) {
+      var code2   = code.toLowerCase(),
+          country = info[code2];
+      if(null == country) {
+        console.log('Skipping: no country information for neighbour %s.', code);
+      }
+      return { code: code, name: country.name };
+    }, [ ]);
+
+    if(countryInfo.currencyCode) {
+      country.properties.currency = { code: countryInfo.currencyCode, name: countryInfo.currencyName }
+    }
+    else {
+      country.properties.currency = null;
+    }
+
+    // Sort.
+    sort(country.properties.languages);
+    sort(country.properties.neighbours);
+
+    // Return the country.
+    return country;
   });
 };
 
@@ -223,19 +308,50 @@ async.auto({
   } ],
 
   // Countries.
-  countries: [ 'srcCountries', 'continents', 'shapes', function(callback, results) {
+  countries: [ 'srcCountries', 'countries2', 'continents', 'languages', 'shapes', function(callback, results) {
     // Import and convert.
     var countries = results.srcCountries.map(recordToGeoJSONFeature('country'));
 
     // Apply continent mapping and shapes.
     countries = updateContinentForGeoJSONFeatures(countries, results.continents);
     countries = appendShapesToGeoJSONFeatures(countries, results.shapes);
+    countries = updateSecondaryInfo(countries, results.countries2, results.languages);
 
     // Format as collection and continue.
     var result = {
       type: 'FeatureCollection',
       features: sort(countries)
     };
+    return callback(null, result);
+  } ],
+
+  // Languages.
+  rawLanguages: function(callback) {
+    return parser(config.src.languages, null, callback);
+  },
+  languages: [ 'rawLanguages', function(callback, results) {
+    // Format as ISO 639-1 -> name mapping.
+    var result = results.rawLanguages.reduce(function(map, record) {
+      var code = record['ISO-639-1'] || null;
+      if(null !== code) {
+        map[code] = record['Language Name'];
+      }
+      return map;
+    }, { });
+    return callback(null, result);
+  } ],
+
+  // Secondary country info.
+  rawCountries: function(callback) {
+    var opts = { columns: config.columns };
+    return parser(config.src.countries2, opts, callback);
+  },
+  countries2: [ 'rawCountries', function(callback, results) {
+    // Format as ISO 3166-2 -> map mapping.
+    var result = results.rawCountries.reduce(function(map, record) {
+      map[record.iso2.toLowerCase()] = record;
+      return map;
+    }, { })
     return callback(null, result);
   } ],
 
