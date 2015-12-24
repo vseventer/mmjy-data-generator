@@ -9,7 +9,7 @@
 `$ npm start`
 
 ## Credits
-Continent, country, and shape data from [GeoNames.org](http://www.geonames.org/).
+Continent, country, city, language, shape, and timezone data from [GeoNames.org](http://www.geonames.org/).
 
 ## Changelog
 See the [Changelog](./CHANGELOG.md) for a list of changes.

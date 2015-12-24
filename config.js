@@ -35,19 +35,26 @@ var src  = path.join(__dirname, './src'),
 module.exports = {
   // Source.
   src: {
+    cities     : path.join(src, 'cities.csv'),
     continents : path.join(src, 'continents.json'),
-    countries  : path.join(src, 'countries.json'),
-    countries2 : path.join(src, 'countries.csv'),
-    languages  : path.join(src, 'languages.csv'),
-    shapes     : path.join(src, 'shapes.csv'),
+    countries  : {
+      api : path.join(src, 'countries.json'),
+      csv : path.join(src, 'countries.csv')
+    },
+    languages : path.join(src, 'languages.csv'),
+    shapes    : path.join(src, 'shapes.csv'),
+    timezones : path.join(src, 'timezones.csv'),
 
-    caribbean      : path.join(src, 'caribbean.json'),
-    centralAmerica : path.join(src, 'central-america.json'),
-    middleEast     : path.join(src, 'middle-east.json')
+    custom: {
+      caribbean      : path.join(src, 'caribbean.json'),
+      centralAmerica : path.join(src, 'central-america.json'),
+      middleEast     : path.join(src, 'middle-east.json')
+    }
   },
 
   // Destination.
   dest: {
+    cities     : path.join(dest, 'cities.json'),
     continents : path.join(dest, 'continents.json'),
     countries  : path.join(dest, 'countries.json')
   },
@@ -88,29 +95,66 @@ module.exports = {
     ]
   }],
 
-  // Secondary country mapping.
-  columns: [
-    'iso2',
-    'iso3',
-    'iso',
-    'fips',
-    'name',
-    'capital',
-    'area',
-    'population',
-    'continent',
-    'tld',
-    'currencyCode',
-    'currencyName',
-    'phone',
-    'postalCodeFormat',
-    'postalCodeRegex',
-    'languages',
-    'geonameid',
-    'neighbours',
-    'fips2'
-  ],
+  // CSV field mappings.
+  csv: {
+    // COUNTRIES.
+    // ==========
+    country: [
+      'iso2',
+      'iso3',
+      'iso',
+      'fips',
+      'name',
+      'capital',
+      'area',
+      'population',
+      'continent',
+      'tld',
+      'currencyCode',
+      'currencyName',
+      'phone',
+      'postalCodeFormat',
+      'postalCodeRegex',
+      'languages',
+      'geonameid',
+      'neighbours',
+      'fips2'
+    ],
 
-  // Maximum polygon length.
-  maxLength: 250
+    // GEONAMES.
+    // =========
+    geoname: [ // @see http://download.geonames.org/export/dump/
+      'geonameid',    // Id of record in geonames database.
+      'name',         // Name of geographical point.
+      'asciiName',    // Name of geographical point in plain ascii characters.
+      'alternateNames', // Alternatenames, comma separated, ascii names automatically transliterated.
+      'latitude',     // Latitude in decimal degrees (WGS84).
+      'longitude',    // Longitude in decimal degrees (WGS84).
+      'featureClass', // @see http://www.geonames.org/export/codes.html
+      'featureCode',  // @see http://www.geonames.org/export/codes.html
+      'countryCode',  // ISO-3166 2-letter country code.
+      'cc2',          // Alternate country codes, comma separated, ISO-3166 2-letter country code.
+      'admin1',       // Fipscode.
+      'admin2',       // Code for the second administrative division, a county in the US.
+      'admin3',       // Code for the third administrative division.
+      'admin4',       // Code for the fourth administrative division.
+      'population',
+      'elevation',    // In meters.
+      'dem',          // Digital elevation model, SRTM3 or GTOPO30.
+      'timezone',     // Timezone id.
+      'modificationDate' // Date of last modification.
+    ],
+
+    // TIMEZONES.
+    // ==========
+    timezone: [
+      'countryCode',
+      'name',
+      'gmt',
+      'dst',
+      'raw'
+    ]
+  },
+
+  maxLength: 250 // Maximum polygon length.
 };

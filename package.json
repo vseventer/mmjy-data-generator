@@ -1,16 +1,20 @@
 {
   "name"        : "mmjy-data-generator",
-  "version"     : "0.1.1-dev",
+  "version"     : "0.2.0",
   "description" : "Utility for generating GeoJSON continent and country data for MarkMyJourney.",
   "license"     : "MIT",
   "author"      : "Mark van Seventer <mark@vseventer.com>",
   "repository"  : "vseventer/mmjy-data-generator",
   "config"      : {
+    "cities"    : "http://download.geonames.org/export/dump/cities5000.zip",
+    "countries" : {
+      "api" : "http://api.geonames.org/searchJSON?q=&featureCode=PCL&featureCode=PCLD&featureCode=PCLF&featureCode=PCLI&featureCode=PCLIX&featureCode=PCLS&featureCode=TERR&formatted=true&maxRows=500&style=full&username=demo",
+      "csv" : "http://download.geonames.org/export/dump/countryInfo.txt"
+    },
     "continents" : "http://api.geonames.org/searchJSON?q=&featureCode=CONT&formatted=true&style=full&username=demo",
-    "countries1" : "http://api.geonames.org/searchJSON?q=&featureCode=PCL&featureCode=PCLD&featureCode=PCLF&featureCode=PCLI&featureCode=PCLIX&featureCode=PCLS&featureCode=TERR&formatted=true&maxRows=500&style=full&username=demo",
-    "countries2" : "http://download.geonames.org/export/dump/countryInfo.txt",
     "languages"  : "http://download.geonames.org/export/dump/iso-languagecodes.txt",
     "shapes"     : "http://download.geonames.org/export/dump/shapes_simplified_low.zip",
+    "timezones"  : "http://download.geonames.org/export/dump/timeZones.txt",
 
     "caribbean"       : "http://api.geonames.org/searchJSON?name=carribean&featureCode=RGN&formatted=true&style=full&username=demo",
     "central_america" : "http://api.geonames.org/searchJSON?name=central+america&featureCode=RGN&formatted=true&style=full&username=demo",
@@ -21,21 +25,26 @@
     "clean"     : "rimraf ./out ./src",
     "postclean" : "mkdir ./out",
 
-    "pregenerate" : "npm run pull",
-    "generate"    : "node .",
+    "pull" : "parallelshell 'npm run pull:cities' 'npm run pull:continents' 'npm run pull:custom' 'npm run pull:countries' 'npm run pull:languages' 'npm run pull:shapes' 'npm run pull:timezones'",
 
-    "pull": "parallelshell 'npm run pull:continents' 'npm run pull:countries1' 'npm run pull:countries2' 'npm run pull:languages' 'npm run pull:shapes' 'npm run pull:caribbean' 'npm run pull:central-america' 'npm run pull:middle-east'",
+    "pull:cities"        : "curl -o src/cities.zip      --create-dirs $npm_package_config_cities",
+    "pull:continents"    : "curl -o src/continents.json --create-dirs $npm_package_config_continents",
+    "pull:countries"     : "parallelshell 'npm run pull:countries:api' 'npm run pull:countries:csv'",
+    "pull:countries:api" : "curl -o src/countries.json  --create-dirs $npm_package_config_countries_api",
+    "pull:countries:csv" : "curl -o src/countries.csv   --create-dirs $npm_package_config_countries_csv",
+    "pull:languages"     : "curl -o src/languages.csv   --create-dirs $npm_package_config_languages",
+    "pull:shapes"        : "curl -o src/shapes.zip      --create-dirs $npm_package_config_shapes",
+    "pull:timezones"     : "curl -o src/timezones.csv   --create-dirs $npm_package_config_timezones",
+    "postpull:cities"    : "unzip -p src/cities.zip > src/cities.csv",
+    "postpull:shapes"    : "unzip -p src/shapes.zip > src/shapes.csv",
 
-    "pull:continents" : "curl -o src/continents.json --create-dirs $npm_package_config_continents",
-    "pull:countries1" : "curl -o src/countries.json  --create-dirs $npm_package_config_countries1",
-    "pull:countries2" : "curl -o src/countries.csv   --create-dirs $npm_package_config_countries2",
-    "pull:languages"  : "curl -o src/languages.csv   --create-dirs $npm_package_config_languages",
-    "pull:shapes"     : "curl -o src/shapes.zip      --create-dirs $npm_package_config_shapes",
-    "postpull:shapes" : "unzip -p src/shapes.zip > src/shapes.csv",
-
+    "pull:custom": "parallelshell 'npm run pull:caribbean' 'npm run pull:central-america' 'npm run pull:middle-east'",
     "pull:caribbean"       : "curl -o src/caribbean.json       --create-dirs $npm_package_config_caribbean",
     "pull:central-america" : "curl -o src/central-america.json --create-dirs $npm_package_config_central_america",
     "pull:middle-east"     : "curl -o src/middle-east.json     --create-dirs $npm_package_config_middle_east",
+
+    "pregenerate" : "npm run pull",
+    "generate"    : "node .",
 
     "prestart" : "npm run clean",
     "start"    : "npm run generate",
@@ -45,9 +54,14 @@
   "dependencies": {
     "async"         : "1.5.x",
     "csv-parse"     : "1.0.x",
+    "lodash.find"   : "3.2.x",
+    "lodash.matchesproperty": "3.2.x",
+    "lodash.sortby" : "3.1.x",
+    "moment"        : "2.10.x",
+    "numeral"       : "1.5.x",
     "object-assign" : "4.0.x",
     "parallelshell" : "2.0.x",
-    "rimraf"        : "2.4.x",
+    "rimraf"        : "2.5.x",
     "slug"          : "0.9.x"
   },
   "devDependencies": {
