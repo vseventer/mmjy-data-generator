@@ -36,6 +36,7 @@ module.exports = {
   // Source.
   src: {
     cities     : path.join(src, 'cities.csv'),
+    codes      : path.join(src, 'codes.csv'),
     continents : path.join(src, 'continents.json'),
     countries  : {
       api : path.join(src, 'countries.json'),
@@ -97,6 +98,15 @@ module.exports = {
 
   // CSV field mappings.
   csv: {
+    // CODES.
+    // ======
+    code: [
+      'code',
+      'name',
+      'asciiname',
+      'geonameid'
+    ],
+
     // COUNTRIES.
     // ==========
     country: [

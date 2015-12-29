@@ -35,6 +35,10 @@ var config = require('./config'),
 
 // Run.
 async.auto({
+  // CODES.
+  // ======
+  codes: reader.bind(null, config.src.codes, { columns: config.csv.code }),
+
   // CONTINENTS.
   // ===========
   'src.continents': [ 'custom', function(callback, results) {
@@ -67,7 +71,7 @@ async.auto({
   // CITIES.
   // =======
   'src.cities': reader.bind(null, config.src.cities, { columns: config.csv.geoname }),
-  cities: [ 'src.cities', 'timezones', 'countries', function(callback, results) {
+  cities: [ 'src.cities', 'codes', 'timezones', 'countries', function(callback, results) {
     var data = transform.cities(results['src.cities'], results);
     return callback(null, data);
   } ],
