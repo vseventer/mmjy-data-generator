@@ -1,7 +1,8 @@
 # Changelog
 
-## 0.2.1-dev
+## 0.2.1 (January 5, 2016)
 * Added region data to `cities.json`.
+* Bump dependencies.
 * Display warning for non-unique slugs.
 * Format population as `null` instead of `0`.
 
