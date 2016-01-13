@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.2.2 (January 13, 2016)
+* Use `fast-csv` instead of `csv-parse`.
+
 ## 0.2.1 (January 5, 2016)
 * Added region data to `cities.json`.
 * Bump dependencies.

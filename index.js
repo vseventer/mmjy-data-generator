@@ -37,7 +37,7 @@ var config = require('./config'),
 async.auto({
   // CODES.
   // ======
-  codes: reader.bind(null, config.src.codes, { columns: config.csv.code }),
+  codes: reader.bind(null, config.src.codes, { headers: config.csv.code }),
 
   // CONTINENTS.
   // ===========
@@ -59,7 +59,7 @@ async.auto({
     var data = require(config.src.countries.api).geonames;
     return callback(null, data);
   },
-  'src.countries': reader.bind(null, config.src.countries.csv, { columns: config.csv.country }),
+  'src.countries': reader.bind(null, config.src.countries.csv, { headers: config.csv.country }),
   countries: [ 'api.countries', 'src.continents', 'src.countries', 'languages', 'shapes', 'timezones', function(callback, results) {
     var data = transform.countries(results['src.countries'], results);
     return callback(null, data);
@@ -70,7 +70,7 @@ async.auto({
 
   // CITIES.
   // =======
-  'src.cities': reader.bind(null, config.src.cities, { columns: config.csv.geoname }),
+  'src.cities': reader.bind(null, config.src.cities, { headers: config.csv.geoname }),
   cities: [ 'src.cities', 'codes', 'timezones', 'countries', function(callback, results) {
     var data = transform.cities(results['src.cities'], results);
     return callback(null, data);
@@ -104,7 +104,7 @@ async.auto({
 
   // TIMEZONES.
   // ==========
-  timezones: reader.bind(null, config.src.timezones, { columns: config.csv.timezone })
+  timezones: reader.bind(null, config.src.timezones, { headers: config.csv.timezone })
 }, function(err, results) {
   if(null !== err) {
     console.error(err);
