@@ -1,7 +1,7 @@
 /*!
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 Mark van Seventer
+ * Copyright (c) 2016 Mark van Seventer
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -25,10 +25,13 @@
 'use strict';
 
 // Package modules.
-var async = require('async');
+var async = require('async'),
+    glob  = require('glob');
 
 // Local modules.
 var config = require('./config'),
+    format = require('./lib/format'),
+    matter = require('./lib/matter'),
     reader = require('./lib/reader'),
     transform = require('./lib/transform'),
     writer = require('./lib/writer');
@@ -37,7 +40,11 @@ var config = require('./config'),
 async.auto({
   // CODES.
   // ======
-  codes: reader.bind(null, config.src.codes, { headers: config.csv.code }),
+  'src.codes': reader.bind(reader, config.src.codes, { headers: config.csv.codes }),
+  codes: [ 'src.codes', function(callback, results) {
+    var data = format.indexBy(results['src.codes'], 'code');
+    return callback(null, data);
+  } ],
 
   // CONTINENTS.
   // ===========
@@ -59,24 +66,13 @@ async.auto({
     var data = require(config.src.countries.api).geonames;
     return callback(null, data);
   },
-  'src.countries': reader.bind(null, config.src.countries.csv, { headers: config.csv.country }),
+  'src.countries': reader.bind(reader, config.src.countries.csv, { headers: config.csv.country }),
   countries: [ 'api.countries', 'src.continents', 'src.countries', 'languages', 'shapes', 'timezones', function(callback, results) {
     var data = transform.countries(results['src.countries'], results);
     return callback(null, data);
   } ],
   'dest.countries': [ 'countries', function(callback, results) {
     return writer(config.dest.countries, results.countries, callback);
-  } ],
-
-  // CITIES.
-  // =======
-  'src.cities': reader.bind(null, config.src.cities, { headers: config.csv.geoname }),
-  cities: [ 'src.cities', 'codes', 'timezones', 'countries', function(callback, results) {
-    var data = transform.cities(results['src.cities'], results);
-    return callback(null, data);
-  } ],
-  'dest.cities': [ 'cities', function(callback, results) {
-    return writer(config.dest.cities, results.cities, callback);
   } ],
 
   // CUSTOM CONTINENTS.
@@ -96,22 +92,88 @@ async.auto({
 
   // LANGUAGES.
   // ==========
-  languages: reader.bind(null, config.src.languages, { }),
+  'src.languages': reader.bind(reader, config.src.languages, {
+    headers   : config.csv.languages,
+    skipFirst : true
+  }),
+  languages: [ 'src.languages', function(callback, results) {
+    var data = format.indexBy(results['src.languages'], 'iso1');
+    return callback(null, data);
+  } ],
+
+  // MATTER.
+  // =======
+  'src.matter': function(callback) {
+    glob(config.pattern, { nocase: true, nosort: true }, callback);
+  },
+  matter: [ 'src.matter', function(callback, results) {
+    var data = matter(results['src.matter']);
+    callback(null, data);
+  } ],
+  'dest.matter': [ 'matter', 'places', function(callback, results) {
+    // Calculate difference between all and added places.
+    var added = results.places.features.map(function(place) {
+      return place.properties.id;
+    });
+
+    // Log missing places and continue.
+    Object.keys(results.matter).forEach(function(geonameid) {
+      var key = parseInt(geonameid, 10);
+      if(-1 === added.indexOf(key)) {
+        console.log('PLACE: %d (%s): no match.', key, results.matter[geonameid]);
+      }
+    });
+    return callback();
+  } ],
+
+  // PLACES.
+  // =======
+  'src.places': [ 'codes', 'countries', 'matter', 'timezones', function(callback, results) {
+    var validateFn = function(feature) {
+      if(!results.matter.hasOwnProperty(feature.geonameid)) {
+        return false;
+      }
+      console.log('PLACE: %s: adding %s.', results.matter[feature.geonameid], feature.name);
+      return true;
+    };
+    return reader(config.src.places, { autoParse: false, headers: config.csv.geoname, validate: validateFn }, callback);
+  } ],
+  places: [ 'matter', 'src.places', function(callback, results) {
+    var data = transform.places(results['src.places'], results);
+    return callback(null, data);
+  } ],
+  'dest.places': [ 'places', function(callback, results) {
+    return writer(config.dest.places, results.places, callback);
+  } ],
 
   // SHAPES.
   // =======
-  shapes: reader.bind(null, config.src.shapes, { }),
+  'src.shapes': reader.bind(reader, config.src.shapes, {
+    headers   : config.csv.shapes,
+    skipFirst : true
+  }),
+  shapes: [ 'src.shapes', function(callback, results) {
+    var data = format.indexBy(results['src.shapes'], 'geonameid');
+    return callback(null, data);
+  } ],
 
   // TIMEZONES.
   // ==========
-  timezones: reader.bind(null, config.src.timezones, { headers: config.csv.timezone })
+  'src.timezones': reader.bind(reader, config.src.timezones, {
+    headers   : config.csv.timezones,
+    skipFirst : true
+  }),
+  timezones: [ 'src.timezones', function(callback, results) {
+    var data = format.indexBy(results['src.timezones'], 'name');
+    return callback(null, data);
+  } ]
 }, function(err, results) {
   if(null !== err) {
     console.error(err);
     process.exit(1);
   }
 
-  console.log('CITIES: %d features in %s.',     results.cities.features.length,     config.dest.cities);
   console.log('COUNTRIES: %d features in %s.',  results.countries.features.length,  config.dest.countries);
   console.log('CONTINENTS: %d features in %s.', results.continents.features.length, config.dest.continents);
+  console.log('PLACES: %d features in %s.',     results.places.features.length,     config.dest.places);
 });

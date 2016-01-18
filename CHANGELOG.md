@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0 (January 18, 2016)
+* Added `places.json` with places of interest based on external metadata.
+* Optimized parsing and transform algorithms.
+* Removed `cities.json`.
+* Updated copyright to `2016`.
+
 ## 0.2.2 (January 13, 2016)
 * Use `fast-csv` instead of `csv-parse`.
 

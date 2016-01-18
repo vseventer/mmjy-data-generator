@@ -1,7 +1,7 @@
 /*!
  * The MIT License (MIT)
  *
- * Copyright (c) 2015 Mark van Seventer
+ * Copyright (c) 2016 Mark van Seventer
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of
  * this software and associated documentation files (the "Software"), to deal in
@@ -29,13 +29,16 @@ var path = require('path');
 
 // Configure.
 var src  = path.join(__dirname, './src'),
-    dest = path.join(__dirname, './out');
+    dest = path.join(__dirname, './out'),
+    hugo = path.join(__dirname, '../markmyjourney/'); // Path to MarkMyJourney repo.
 
 // Exports.
 module.exports = {
+  // Frontmatter glob pattern.
+  pattern: path.join(hugo, 'content/**/*.md'),
+
   // Source.
   src: {
-    cities     : path.join(src, 'cities.csv'),
     codes      : path.join(src, 'codes.csv'),
     continents : path.join(src, 'continents.json'),
     countries  : {
@@ -43,6 +46,7 @@ module.exports = {
       csv : path.join(src, 'countries.csv')
     },
     languages : path.join(src, 'languages.csv'),
+    places    : path.join(src, 'places.csv'),
     shapes    : path.join(src, 'shapes.csv'),
     timezones : path.join(src, 'timezones.csv'),
 
@@ -55,9 +59,9 @@ module.exports = {
 
   // Destination.
   dest: {
-    cities     : path.join(dest, 'cities.json'),
     continents : path.join(dest, 'continents.json'),
-    countries  : path.join(dest, 'countries.json')
+    countries  : path.join(dest, 'countries.json'),
+    places     : path.join(dest, 'places.json')
   },
 
   // Custom continents.
@@ -100,7 +104,7 @@ module.exports = {
   csv: {
     // CODES.
     // ======
-    code: [
+    codes: [
       'code',
       'name',
       'asciiname',
@@ -155,9 +159,25 @@ module.exports = {
       'modificationDate' // Date of last modification.
     ],
 
+    // LANGUAGES.
+    // ==========
+    languages: [
+      'iso3',
+      'iso2',
+      'iso1',
+      'name'
+    ],
+
+    // SHAPES.
+    // =======
+    shapes: [
+      'geonameid',
+      'geoJSON'
+    ],
+
     // TIMEZONES.
     // ==========
-    timezone: [
+    timezones: [
       'countryCode',
       'name',
       'gmt',

@@ -3,13 +3,14 @@
 
 ## Installation
 * `$ git clone vseventer/mmjy-data-generator`
+* Ensure the `config.pattern` entry path points to MarkMyJourneys `content/` folder.
 * Replace `?username=demo` with your [GeoNames](http://www.geonames.org/) username inside `package.json` config property.
 
 ## Usage
 `$ npm start`
 
 ## Credits
-Continent, country, city, language, shape, and timezone data from [GeoNames.org](http://www.geonames.org/).
+Continent, country, language, place, shape, and timezone data from [GeoNames.org](http://www.geonames.org/).
 
 ## Changelog
 See the [Changelog](./CHANGELOG.md) for a list of changes.
@@ -17,7 +18,7 @@ See the [Changelog](./CHANGELOG.md) for a list of changes.
 ## License
     The MIT License (MIT)
 
-    Copyright (c) 2015 Mark van Seventer
+    Copyright (c) 2016 Mark van Seventer
 
     Permission is hereby granted, free of charge, to any person obtaining a copy of
     this software and associated documentation files (the "Software"), to deal in
