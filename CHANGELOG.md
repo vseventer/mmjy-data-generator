@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.4.0
+## 0.4.0 (February 10, 2016)
 * Decreased polygon tolerance step from `0.1` to `0.025` if initial iteration
   did not yield any coordinates. Required for: Maldives and Marshall Islands.
 * Updated polygon algorithm to wrap longitudes around antemeridian. Affects:
