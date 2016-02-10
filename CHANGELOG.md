@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.4.0
+* Decreased polygon tolerance step from `0.1` to `0.025` if initial iteration
+  did not yield any coordinates. Required for: Maldives and Marshall Islands.
+* Updated polygon algorithm to wrap longitudes around antemeridian. Affects:
+  Asia, Oceania, Fiji, Kiribati, New Zealand, Russia, and
+  United States Minor Outlying Islands.
+
 ## 0.3.0 (January 18, 2016)
 * Added `places.json` with places of interest based on external metadata.
 * Optimized parsing and transform algorithms.
