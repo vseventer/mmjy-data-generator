@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.1 (April 2, 2016)
+* Optimized `lib/polygon.js`.
+* Updated `fast-csv`, `glob`, `lodash.find`, `lodash.matchesproperty`,
+  `lodash.sortby`, and `moment` dependencies.
+
 ## 0.4.0 (February 10, 2016)
 * Decreased polygon tolerance step from `0.1` to `0.025` if initial iteration
   did not yield any coordinates. Required for: Maldives and Marshall Islands.

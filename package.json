@@ -1,6 +1,6 @@
 {
   "name"        : "mmjy-data-generator",
-  "version"     : "0.4.0",
+  "version"     : "0.4.1-dev",
   "description" : "Utility for generating GeoJSON continent and country data for MarkMyJourney.",
   "license"     : "MIT",
   "author"      : "Mark van Seventer <mark@vseventer.com>",
@@ -26,7 +26,7 @@
     "clean"     : "rimraf ./out ./src",
     "postclean" : "mkdir ./out",
 
-    "pull" : "parallelshell 'npm run pull:codes' 'npm run pull:continents' 'npm run pull:custom' 'npm run pull:countries' 'npm run pull:languages' 'npm run pull:places' 'npm run pull:shapes' 'npm run pull:timezones'",
+    "pull" : "parallelshell 'npm run pull:codes' 'npm run pull:continents' 'npm run pull:custom' 'npm run pull:countries' 'npm run pull:languages' 'npm run pull:shapes' 'npm run pull:timezones'",
 
     "pull:codes"         : "curl -o src/codes.csv       --create-dirs $npm_package_config_codes",
     "pull:continents"    : "curl -o src/continents.json --create-dirs $npm_package_config_continents",
@@ -54,13 +54,13 @@
   },
   "dependencies": {
     "async"         : "1.5.x",
-    "fast-csv"      : "1.0.x",
-    "glob"          : "6.0.x",
+    "fast-csv"      : "1.1.x",
+    "glob"          : "7.0.x",
     "gray-matter"   : "2.0.x",
-    "lodash.find"   : "4.0.x",
-    "lodash.matchesproperty": "4.0.x",
-    "lodash.sortby" : "4.0.x",
-    "moment"        : "2.11.x",
+    "lodash.find"   : "4.2.x",
+    "lodash.matchesproperty": "4.3.x",
+    "lodash.sortby" : "4.2.x",
+    "moment"        : "2.12.x",
     "numeral"       : "1.5.x",
     "object-assign" : "4.0.x",
     "parallelshell" : "2.0.x",
