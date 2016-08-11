@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.5.0 (August 11, 2016)
+* Updated `async`, `jshint-stylish`, `lodash.find`, `lodash.matchesproperty`,
+  `lodash.sortby`, `moment`, and `object-assign` dependencies.
+
 ## 0.4.1 (April 2, 2016)
 * Optimized `lib/polygon.js`.
 * Updated `fast-csv`, `glob`, `lodash.find`, `lodash.matchesproperty`,

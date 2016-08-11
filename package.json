@@ -1,6 +1,6 @@
 {
   "name"        : "mmjy-data-generator",
-  "version"     : "0.4.1",
+  "version"     : "0.5.0",
   "description" : "Utility for generating GeoJSON continent and country data for MarkMyJourney.",
   "license"     : "MIT",
   "author"      : "Mark van Seventer <mark@vseventer.com>",
@@ -53,16 +53,16 @@
     "test"   : "jshint --reporter=./node_modules/jshint-stylish *.js lib/"
   },
   "dependencies": {
-    "async"         : "1.5.x",
-    "fast-csv"      : "1.1.x",
+    "async"         : "2.0.x",
+    "fast-csv"      : "2.1.x",
     "glob"          : "7.0.x",
     "gray-matter"   : "2.0.x",
-    "lodash.find"   : "4.2.x",
-    "lodash.matchesproperty": "4.3.x",
-    "lodash.sortby" : "4.2.x",
-    "moment"        : "2.12.x",
+    "lodash.find"   : "4.5.x",
+    "lodash.matchesproperty": "4.6.x",
+    "lodash.sortby" : "4.6.x",
+    "moment"        : "2.14.x",
     "numeral"       : "1.5.x",
-    "object-assign" : "4.0.x",
+    "object-assign" : "4.1.x",
     "parallelshell" : "2.0.x",
     "rimraf"        : "2.5.x",
     "slug"          : "0.9.x",
@@ -70,8 +70,8 @@
   },
   "devDependencies": {
     "jshint"         : "2.9.x",
-    "jshint-stylish" : "2.1.x"
+    "jshint-stylish" : "2.2.x"
   },
-  "engines" : { "node": ">=0.10" },
+  "engines" : { "node": ">=0.12" },
   "private" : true
 }

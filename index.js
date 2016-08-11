@@ -41,22 +41,22 @@ async.auto({
   // CODES.
   // ======
   'src.codes': reader.bind(reader, config.src.codes, { headers: config.csv.codes }),
-  codes: [ 'src.codes', function(callback, results) {
+  codes: [ 'src.codes', function(results, callback) {
     var data = format.indexBy(results['src.codes'], 'code');
     return callback(null, data);
   } ],
 
   // CONTINENTS.
   // ===========
-  'src.continents': [ 'custom', function(callback, results) {
+  'src.continents': [ 'custom', function(results, callback) {
     var data = require(config.src.continents).geonames.concat(results.custom);
     return callback(null, data);
   } ],
-  continents: [ 'src.continents', 'countries', function(callback, results) {
+  continents: [ 'src.continents', 'countries', function(results, callback) {
     var data = transform.continents(results['src.continents'], results);
     return callback(null, data);
   } ],
-  'dest.continents': [ 'continents', function(callback, results) {
+  'dest.continents': [ 'continents', function(results, callback) {
     return writer(config.dest.continents, results.continents, callback);
   } ],
 
@@ -67,11 +67,11 @@ async.auto({
     return callback(null, data);
   },
   'src.countries': reader.bind(reader, config.src.countries.csv, { headers: config.csv.country }),
-  countries: [ 'api.countries', 'src.continents', 'src.countries', 'languages', 'shapes', 'timezones', function(callback, results) {
+  countries: [ 'api.countries', 'src.continents', 'src.countries', 'languages', 'shapes', 'timezones', function(results, callback) {
     var data = transform.countries(results['src.countries'], results);
     return callback(null, data);
   } ],
-  'dest.countries': [ 'countries', function(callback, results) {
+  'dest.countries': [ 'countries', function(results, callback) {
     return writer(config.dest.countries, results.countries, callback);
   } ],
 
@@ -85,7 +85,7 @@ async.auto({
     ]);
     return callback(null, data);
   },
-  custom: [ 'src.custom', function(callback, results) {
+  custom: [ 'src.custom', function(results, callback) {
     var data = transform.custom(results['src.custom'], config);
     return callback(null, data);
   } ],
@@ -96,7 +96,7 @@ async.auto({
     headers   : config.csv.languages,
     skipFirst : true
   }),
-  languages: [ 'src.languages', function(callback, results) {
+  languages: [ 'src.languages', function(results, callback) {
     var data = format.indexBy(results['src.languages'], 'iso1');
     return callback(null, data);
   } ],
@@ -106,11 +106,11 @@ async.auto({
   'src.matter': function(callback) {
     glob(config.pattern, { nocase: true, nosort: true }, callback);
   },
-  matter: [ 'src.matter', function(callback, results) {
+  matter: [ 'src.matter', function(results, callback) {
     var data = matter(results['src.matter']);
     callback(null, data);
   } ],
-  'dest.matter': [ 'matter', 'places', function(callback, results) {
+  'dest.matter': [ 'matter', 'places', function(results, callback) {
     // Calculate difference between all and added places.
     var added = results.places.features.map(function(place) {
       return place.properties.id;
@@ -128,7 +128,7 @@ async.auto({
 
   // PLACES.
   // =======
-  'src.places': [ 'codes', 'countries', 'matter', 'timezones', function(callback, results) {
+  'src.places': [ 'codes', 'countries', 'matter', 'timezones', function(results, callback) {
     var validateFn = function(feature) {
       if(!results.matter.hasOwnProperty(feature.geonameid)) {
         return false;
@@ -138,11 +138,11 @@ async.auto({
     };
     return reader(config.src.places, { autoParse: false, headers: config.csv.geoname, validate: validateFn }, callback);
   } ],
-  places: [ 'matter', 'src.places', function(callback, results) {
+  places: [ 'matter', 'src.places', function(results, callback) {
     var data = transform.places(results['src.places'], results);
     return callback(null, data);
   } ],
-  'dest.places': [ 'places', function(callback, results) {
+  'dest.places': [ 'places', function(results, callback) {
     return writer(config.dest.places, results.places, callback);
   } ],
 
@@ -152,7 +152,7 @@ async.auto({
     headers   : config.csv.shapes,
     skipFirst : true
   }),
-  shapes: [ 'src.shapes', function(callback, results) {
+  shapes: [ 'src.shapes', function(results, callback) {
     var data = format.indexBy(results['src.shapes'], 'geonameid');
     return callback(null, data);
   } ],
@@ -163,7 +163,7 @@ async.auto({
     headers   : config.csv.timezones,
     skipFirst : true
   }),
-  timezones: [ 'src.timezones', function(callback, results) {
+  timezones: [ 'src.timezones', function(results, callback) {
     var data = format.indexBy(results['src.timezones'], 'name');
     return callback(null, data);
   } ]
