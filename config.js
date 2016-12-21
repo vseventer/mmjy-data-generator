@@ -66,7 +66,7 @@ module.exports = {
 
   // Custom continents.
   continents: [{
-    id   : 'Carribean',
+    id   : 'Caribbean',
     name : 'Caribbean', // Fix GeoNames typo.
     code : 'CR'
   }, {

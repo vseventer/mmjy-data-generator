@@ -1,6 +1,6 @@
 {
   "name"        : "mmjy-data-generator",
-  "version"     : "0.5.0",
+  "version"     : "0.5.1",
   "description" : "Utility for generating GeoJSON continent and country data for MarkMyJourney.",
   "license"     : "MIT",
   "author"      : "Mark van Seventer <mark@vseventer.com>",
@@ -17,7 +17,7 @@
     "shapes"     : "http://download.geonames.org/export/dump/shapes_simplified_low.zip",
     "timezones"  : "http://download.geonames.org/export/dump/timeZones.txt",
 
-    "caribbean"       : "http://api.geonames.org/searchJSON?name=carribean&featureCode=RGN&formatted=true&style=full&username=demo",
+    "caribbean"       : "http://api.geonames.org/searchJSON?name=caribean&featureCode=RGN&formatted=true&style=full&username=demo",
     "central_america" : "http://api.geonames.org/searchJSON?name=central+america&featureCode=RGN&formatted=true&style=full&username=demo",
     "middle_east"     : "http://api.geonames.org/searchJSON?name=middle+east&featureCode=RGN&formatted=true&style=full&username=demo"
   },
@@ -53,15 +53,15 @@
     "test"   : "jshint --reporter=./node_modules/jshint-stylish *.js lib/"
   },
   "dependencies": {
-    "async"         : "2.0.x",
-    "fast-csv"      : "2.1.x",
-    "glob"          : "7.0.x",
-    "gray-matter"   : "2.0.x",
-    "lodash.find"   : "4.5.x",
-    "lodash.matchesproperty": "4.6.x",
-    "lodash.sortby" : "4.6.x",
-    "moment"        : "2.14.x",
-    "numeral"       : "1.5.x",
+    "async"         : "2.1.x",
+    "fast-csv"      : "2.3.x",
+    "glob"          : "7.1.x",
+    "gray-matter"   : "2.1.x",
+    "lodash.find"   : "4.6.x",
+    "lodash.matchesproperty": "4.7.x",
+    "lodash.sortby" : "4.7.x",
+    "moment"        : "2.17.x",
+    "numeral"       : "2.0.x",
     "object-assign" : "4.1.x",
     "parallelshell" : "2.0.x",
     "rimraf"        : "2.5.x",

@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.1 (December 21, 2016)
+* Updated `async`, `fast-csv`, `glob`, `gray-matter`, `lodash.find`,
+  `lodash.matchesproperty`, `lodash.sortby`, `moment`, and `numeral`
+  dependencies.
+
 ## 0.5.0 (August 11, 2016)
 * Updated `async`, `jshint-stylish`, `lodash.find`, `lodash.matchesproperty`,
   `lodash.sortby`, `moment`, and `object-assign` dependencies.
