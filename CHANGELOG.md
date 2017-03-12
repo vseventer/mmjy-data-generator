@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.5.2-dev
+* Updated `fast-csv` and `rimraf` dependencies.
+
 ## 0.5.1 (December 21, 2016)
 * Updated `async`, `fast-csv`, `glob`, `gray-matter`, `lodash.find`,
   `lodash.matchesproperty`, `lodash.sortby`, `moment`, and `numeral`

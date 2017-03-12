@@ -1,6 +1,6 @@
 {
   "name"        : "mmjy-data-generator",
-  "version"     : "0.5.1",
+  "version"     : "0.5.2-dev",
   "description" : "Utility for generating GeoJSON continent and country data for MarkMyJourney.",
   "license"     : "MIT",
   "author"      : "Mark van Seventer <mark@vseventer.com>",
@@ -54,7 +54,7 @@
   },
   "dependencies": {
     "async"         : "2.1.x",
-    "fast-csv"      : "2.3.x",
+    "fast-csv"      : "2.4.x",
     "glob"          : "7.1.x",
     "gray-matter"   : "2.1.x",
     "lodash.find"   : "4.6.x",
@@ -64,7 +64,7 @@
     "numeral"       : "2.0.x",
     "object-assign" : "4.1.x",
     "parallelshell" : "2.0.x",
-    "rimraf"        : "2.5.x",
+    "rimraf"        : "2.6.x",
     "slug"          : "0.9.x",
     "toml"          : "2.3.x"
   },
