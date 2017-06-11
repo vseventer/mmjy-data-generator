@@ -47,7 +47,7 @@ module.exports = {
     },
     languages : path.join(src, 'languages.csv'),
     places    : path.join(src, 'places.csv'),
-    shapes    : path.join(src, 'shapes.csv'),
+    shapes    : path.join(src, 'shapes.json'),
     timezones : path.join(src, 'timezones.csv'),
 
     custom: {
@@ -76,7 +76,7 @@ module.exports = {
     id   : 'Middle East',
     code : 'ME',
     bbox : {
-      north : 39.777222, // Iran.
+      north : 18.9999989031009, // Turkey.
       east  : 63.317471, // Iran.
       south : 12.1110910264462, // Yemen.
       west  : 24.698111  // Egypt.
@@ -95,6 +95,7 @@ module.exports = {
       'QA', // Qatar.
       'SA', // Saudi Arabia.
       'SY', // Syria.
+      'TR', // Turkey.
       'AE', // United Arab Emirates.
       'YE'  // Yemen.
     ]

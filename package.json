@@ -1,6 +1,6 @@
 {
   "name"        : "mmjy-data-generator",
-  "version"     : "0.5.2-dev",
+  "version"     : "0.6.0",
   "description" : "Utility for generating GeoJSON continent and country data for MarkMyJourney.",
   "license"     : "MIT",
   "author"      : "Mark van Seventer <mark@vseventer.com>",
@@ -14,7 +14,7 @@
     "continents" : "http://api.geonames.org/searchJSON?q=&featureCode=CONT&formatted=true&style=full&username=demo",
     "languages"  : "http://download.geonames.org/export/dump/iso-languagecodes.txt",
     "places"     : "http://download.geonames.org/export/dump/allCountries.zip",
-    "shapes"     : "http://download.geonames.org/export/dump/shapes_simplified_low.zip",
+    "shapes"     : "http://download.geonames.org/export/dump/shapes_simplified_low.json.zip",
     "timezones"  : "http://download.geonames.org/export/dump/timeZones.txt",
 
     "caribbean"       : "http://api.geonames.org/searchJSON?name=caribean&featureCode=RGN&formatted=true&style=full&username=demo",
@@ -38,7 +38,7 @@
     "pull:shapes"        : "curl -o src/shapes.zip      --create-dirs $npm_package_config_shapes",
     "pull:timezones"     : "curl -o src/timezones.csv   --create-dirs $npm_package_config_timezones",
     "postpull:places"    : "unzip -p src/places.zip > src/places.csv",
-    "postpull:shapes"    : "unzip -p src/shapes.zip > src/shapes.csv",
+    "postpull:shapes"    : "unzip -p src/shapes.zip > src/shapes.json",
 
     "pull:custom": "parallelshell 'npm run pull:caribbean' 'npm run pull:central-america' 'npm run pull:middle-east'",
     "pull:caribbean"       : "curl -o src/caribbean.json       --create-dirs $npm_package_config_caribbean",
@@ -53,14 +53,14 @@
     "test"   : "jshint --reporter=./node_modules/jshint-stylish *.js lib/"
   },
   "dependencies": {
-    "async"         : "2.1.x",
+    "async"         : "2.4.x",
     "fast-csv"      : "2.4.x",
     "glob"          : "7.1.x",
     "gray-matter"   : "2.1.x",
     "lodash.find"   : "4.6.x",
     "lodash.matchesproperty": "4.7.x",
     "lodash.sortby" : "4.7.x",
-    "moment"        : "2.17.x",
+    "moment"        : "2.18.x",
     "numeral"       : "2.0.x",
     "object-assign" : "4.1.x",
     "parallelshell" : "2.0.x",

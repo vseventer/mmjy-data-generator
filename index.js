@@ -148,12 +148,12 @@ async.auto({
 
   // SHAPES.
   // =======
-  'src.shapes': reader.bind(reader, config.src.shapes, {
-    headers   : config.csv.shapes,
-    skipFirst : true
-  }),
+  'src.shapes': function(callback) {
+    var data = require(config.src.shapes);
+    return callback(null, data);
+  },
   shapes: [ 'src.shapes', function(results, callback) {
-    var data = format.indexBy(results['src.shapes'], 'geonameid');
+    var data = format.indexByNested(results['src.shapes'].features, 'properties', 'geoNameId');
     return callback(null, data);
   } ],
 

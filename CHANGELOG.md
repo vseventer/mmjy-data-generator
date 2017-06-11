@@ -1,7 +1,8 @@
 # Changelog
 
-## 0.5.2-dev
-* Updated `fast-csv` and `rimraf` dependencies.
+## 0.6.0 (June 11, 2017)
+* Updated shapes due to change in GeoNames format.
+* Updated `async`, `fast-csv`, `moment`, and `rimraf` dependencies.
 
 ## 0.5.1 (December 21, 2016)
 * Updated `async`, `fast-csv`, `glob`, `gray-matter`, `lodash.find`,
