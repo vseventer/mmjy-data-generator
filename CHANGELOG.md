@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.0 (October 27, 2017)
+* Replaced `parallelshell` with `concurrently` dependency.
+* Updated `async`, `gray-matter`, and `moment` dependencies.
+
 ## 0.6.0 (June 11, 2017)
 * Updated shapes due to change in GeoNames format.
 * Updated `async`, `fast-csv`, `moment`, and `rimraf` dependencies.
